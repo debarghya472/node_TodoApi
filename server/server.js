@@ -8,6 +8,7 @@ var {Todo}=require('./models/Todos');
 var {User}=require('./models/Users');
 
 var app =express();
+const port=process.env.PORT || 3000;
 
 app.use(bodyParcer.json());
 
@@ -32,6 +33,6 @@ app.get('/todos',(req,res)=>{
 });
 
 
-app.listen(3000,()=>{
-    console.log('started on 3000');
+app.listen(port,()=>{
+    console.log(`started at port ${port}`);
 });
