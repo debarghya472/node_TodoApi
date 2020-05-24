@@ -1,6 +1,7 @@
 var express=require('express');
 var bodyParcer=require('body-parser');
 var {mongoose}=require('./db/mongoose');
+const _=require('lodash');
 
 var {ObjectID}=require('mongodb');
 
@@ -26,13 +27,15 @@ app.post('/todos',(req,res)=>{
 });
 
 app.post('/user',(req,res)=>{
-    var user =new User({
-        email: req.body.email
-    });
+    var body=_.pick(req.body,['email','password']);
+    var user =new User(body);
 
-    user.save().then((doc)=>{
-        res.send(doc);
-    },(err)=>{
+    user.save().then(()=>{
+        return user.generateAuthToken();
+    }).then((token)=>{
+        res.header('x-auth',token).send(user);
+
+    }).catch((err)=>{
         res.status(400).send(err);
     });
 
