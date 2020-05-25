@@ -3,8 +3,9 @@ var bodyParcer=require('body-parser');
 var {mongoose}=require('./db/mongoose');
 const _=require('lodash');
 
-var {ObjectID}=require('mongodb');
 
+var {ObjectID}=require('mongodb');
+var {authenticate}=require('./middleware/authenticate');
 var {Todo}=require('./models/Todos');
 var {User}=require('./models/Users');
 
@@ -56,6 +57,11 @@ app.get('/todos/:id',(req,res)=>{
     }).catch((e)=>{
         return res.status(404).send();
     });
+});
+
+
+app.get('/user/me',authenticate,(req,res)=>{
+    res.send(req.user);
 });
 
 
