@@ -59,7 +59,17 @@ app.get('/todos/:id',(req,res)=>{
     });
 });
 
-
+app.post('/user/login',(req,res)=>{
+    var body=_.pick(req.body,['email','password']);
+    
+    User.findByCredential(body.email,body.password).then((user)=>{
+        user.generateAuthToken().then((token)=>{
+            res.header('x-auth',token).send(user);
+        })
+    }).catch((e)=>{
+        res.status(400).send();
+    });
+})
 app.get('/user/me',authenticate,(req,res)=>{
     res.send(req.user);
 });
