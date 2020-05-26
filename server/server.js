@@ -72,7 +72,8 @@ app.post('/user/login',(req,res)=>{
 });
 
 app.delete('/user/me/token',authenticate,(req,res)=>{
-    req.user.removeToken(req.token).then(()=>{
+    //console.log(req.header('x-auth'));
+    req.user.removeToken(req.header('x-auth')).then(()=>{
         res.status(200).send();
     }).catch((err)=>{
         res.status(400).send();
